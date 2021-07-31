@@ -2,7 +2,9 @@ package com.saimo.yygh.hosp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.saimo.yygh.common.exception.HospitalException;
 import com.saimo.yygh.common.result.Result;
+import com.saimo.yygh.common.result.ResultCodeEnum;
 import com.saimo.yygh.common.utils.MD5;
 import com.saimo.yygh.hosp.service.HospitalSetService;
 import com.saimo.yygh.model.hosp.HospitalSet;
@@ -85,6 +87,10 @@ public class HospitalSetController {
     @ApiOperation(value = "通过id获取医院设置")
     @GetMapping("/getHospitalSet/{id}")
     public Result<HospitalSet> getHospitalSet(@PathVariable Long id) {
+        //测试全局异常
+        if (id == 1) {
+            throw new HospitalException(ResultCodeEnum.CODE_ERROR);
+        }
         return Result.ok(hospitalSetService.getById(id));
     }
 
