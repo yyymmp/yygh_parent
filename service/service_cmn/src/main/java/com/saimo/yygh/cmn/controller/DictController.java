@@ -5,13 +5,12 @@ import com.saimo.yygh.common.result.Result;
 import com.saimo.yygh.model.cmn.Dict;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.w3c.dom.ls.LSInput;
 
 /**
  * @author clearlove
@@ -30,5 +29,11 @@ public class DictController {
     @GetMapping("/findChildData/{id}")
     public Result<List<Dict>> findChildData(@PathVariable Long id) {
         return Result.ok(dictService.findChildData(id));
+    }
+
+    @ApiOperation(value = "exportData")
+    @GetMapping("/exportData")
+    public void exportData(HttpServletResponse httpResponse) {
+        dictService.exportData(httpResponse);
     }
 }
