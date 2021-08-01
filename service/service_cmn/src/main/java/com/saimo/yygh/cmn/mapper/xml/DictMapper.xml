@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.saimo.yygh.cmn.mapper.Dictmapper">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<mapper namespace="com.saimo.yygh.cmn.mapper.DictMapper">
+  <insert
+    id="insertBatch"
+    parameterType="java.util.List" useGeneratedKeys="true">
+    INSERT INTO dict
+    (
+    parent_id,
+    `name`,
+    `value`,
+    dict_code
+    )
+    VALUES
+    <foreach
+      collection="list"
+      item="item"
+      index="index"
+      separator=",">
+      (#{item.parent_id, jdbcType=bigint},
+      #{item.name, jdbcType=VARCHAR},
+      #{item.value, jdbcType=bigint},
+      #{item.dict_code, jdbcType=varchar}
+      )
+    </foreach>
+  </insert>
 </mapper>

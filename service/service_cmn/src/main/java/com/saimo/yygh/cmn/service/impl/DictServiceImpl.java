@@ -3,15 +3,19 @@ package com.saimo.yygh.cmn.service.impl;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.saimo.yygh.cmn.mapper.Dictmapper;
+import com.saimo.yygh.cmn.listener.DictListener;
+import com.saimo.yygh.cmn.mapper.DictMapper;
+import com.saimo.yygh.cmn.service.DictService;
 import com.saimo.yygh.model.cmn.Dict;
 import com.saimo.yygh.vo.cmn.DictEeVo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author clearlove
@@ -20,7 +24,8 @@ import org.springframework.stereotype.Service;
  * @createTime 2021年07月31日 14:30:00
  */
 @Service
-public class DictServiceImpl extends ServiceImpl<Dictmapper, Dict> implements com.saimo.yygh.cmn.service.DictService {
+@Slf4j
+public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
 
     @Override
     public List<Dict> findChildData(Long id) {
@@ -67,6 +72,15 @@ public class DictServiceImpl extends ServiceImpl<Dictmapper, Dict> implements co
         }
     }
 
+    @Override
+    public void importData(MultipartFile file) {
+        try {
+            EasyExcel.read(file.getInputStream(), DictEeVo.class, new DictListener(baseMapper)).sheet().doRead();
+        } catch (IOException ioException) {
+            log.info("读取excel异常:{}", ioException.getMessage());
+        }
+    }
+
     /**
      * 判断该结点下是否有子节点
      *
@@ -78,4 +92,5 @@ public class DictServiceImpl extends ServiceImpl<Dictmapper, Dict> implements co
         queryWrapper.eq("parent_id", id);
         return baseMapper.selectCount(queryWrapper) > 1;
     }
+
 }
