@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.saimo.yygh.hosp.repository.HosptialRepository;
 import com.saimo.yygh.hosp.service.HosptialService;
 import com.saimo.yygh.model.hosp.Hospital;
+import com.saimo.yygh.model.hosp.HospitalSet;
 import java.util.Date;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,10 @@ public class HosptialServiceImpl implements HosptialService {
             hospital.setIsDeleted(0);
             hosptialRepository.save(hospital);
         }
+    }
+
+    @Override
+    public Hospital getHospitalSetByHoscode(String hoscode) {
+        return hosptialRepository.getHospitalByHoscode(hoscode);
     }
 }

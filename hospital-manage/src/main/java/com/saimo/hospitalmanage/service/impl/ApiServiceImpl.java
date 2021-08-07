@@ -191,7 +191,7 @@ public class ApiServiceImpl implements ApiService {
         Map<String, Object> result = new HashMap();
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("hoscode",this.getHoscode());
-        //paramMap.put("depcode",depcode);
+//        paramMap.put("depcode",depcode);
         paramMap.put("page",pageNum);
         paramMap.put("limit",pageSize);
         paramMap.put("timestamp", HttpRequestHelper.getTimestamp());
