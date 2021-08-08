@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -84,6 +85,27 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             EasyExcel.read(file.getInputStream(), DictEeVo.class, new DictListener(baseMapper)).sheet().doRead();
         } catch (IOException ioException) {
             log.info("读取excel异常:{}", ioException.getMessage());
+        }
+    }
+
+    @Override
+    public String getDictName(String depCode, String value) {
+        if (StringUtils.isEmpty(depCode)) {
+            //根据value查询
+            QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("value", value);
+            Dict dict = baseMapper.selectOne(queryWrapper);
+            return dict.getName();
+        } else {
+            QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("dict_code", depCode);
+            Dict dict = baseMapper.selectOne(queryWrapper);
+            //重置搜索条件
+            queryWrapper.clear();
+            queryWrapper.eq("parent_id", dict.getId());
+            queryWrapper.eq("value", value);
+            dict = baseMapper.selectOne(queryWrapper);
+            return dict.getName();
         }
     }
 

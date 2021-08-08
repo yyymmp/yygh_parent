@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @createTime 2021年07月31日 14:32:00
  */
 @RestController
-@RequestMapping("/admin/cmn/doct")
+@RequestMapping("/admin/cmn/dict")
 public class DictController {
 
     @Autowired
@@ -42,5 +42,21 @@ public class DictController {
     @GetMapping("/importData")
     public void importData(MultipartFile file) {
         dictService.importData(file);
+    }
+
+    @ApiOperation(value = "根据depCode和value获取字典名")
+    @GetMapping("/getName/{dictCode}/{value}")
+    public String getName(
+            @PathVariable String dictCode
+            , @PathVariable String value) {
+        String dictName = dictService.getDictName(dictCode, value);
+        return dictName;
+    }
+
+    @ApiOperation(value = "根据depCode和value获取字典名")
+    @GetMapping("/getName/{value}")
+    public String getName(@PathVariable String value) {
+        String dictName = dictService.getDictName("", value);
+        return dictName;
     }
 }
