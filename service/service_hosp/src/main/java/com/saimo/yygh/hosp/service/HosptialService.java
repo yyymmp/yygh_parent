@@ -12,4 +12,8 @@ public interface HosptialService {
     Hospital getHospitalSetByHoscode(String hoscode);
 
     Page<Hospital> listHosp(long page, long limit, HospitalQueryVo hospitalQueryVo);
+
+    void updateStatus(String id, int status);
+
+    Hospital getHospById(String id);
 }

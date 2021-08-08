@@ -10,6 +10,7 @@ import com.saimo.yygh.model.hosp.Schedule;
 import com.saimo.yygh.vo.hosp.HospitalQueryVo;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -93,5 +94,27 @@ public class HosptialServiceImpl implements HosptialService {
 
         return all;
 
+    }
+
+    @Override
+    public void updateStatus(String id, int status) {
+        Hospital hospital = hosptialRepsitory.findById(id).get();
+        hospital.setUpdateTime(new Date());
+        hospital.setStatus(status);
+        hosptialRepsitory.save(hospital);
+    }
+
+    @Override
+    public Hospital getHospById(String id) {
+        Hospital hospital = hosptialRepsitory.findById(id).get();
+        String hostypeString = dictFeignClient.getName("Hostype", hospital.getHostype());
+        String provinceString = dictFeignClient.getName(hospital.getProvinceCode());
+        String cityString = dictFeignClient.getName(hospital.getCityCode());
+        String districtString = dictFeignClient.getName(hospital.getDistrictCode());
+
+        hospital.getParam().put("hostypeString", hostypeString);
+        hospital.getParam().put("fullAddress", provinceString + cityString + districtString);
+
+        return hospital;
     }
 }

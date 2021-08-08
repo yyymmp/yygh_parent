@@ -53,4 +53,20 @@ public class HospitalController {
         Page<Hospital> hospitals = hosptialService.listHosp(page, limit, hospitalQueryVo);
         return Result.ok(hospitals);
     }
+
+    @ApiOperation(value = "更新医院上线状态")
+    @GetMapping("/updateStatus/{id}/{status}")
+    public Result<Void> updateStatus(@PathVariable("id") String id, @PathVariable("status") int status) {
+        hosptialService.updateStatus(id, status);
+        return Result.ok();
+    }
+
+
+    @ApiOperation(value = "医院详情信息")
+    @GetMapping("/getHospById/{id}")
+    public Result<Hospital> getHospById(@PathVariable("id") String id) {
+        return Result.ok(hosptialService.getHospById(id));
+    }
+
+
 }

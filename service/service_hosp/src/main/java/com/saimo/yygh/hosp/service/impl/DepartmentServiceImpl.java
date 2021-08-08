@@ -5,8 +5,13 @@ import com.saimo.yygh.hosp.repository.DepartmentRepository;
 import com.saimo.yygh.hosp.service.DepartmentService;
 import com.saimo.yygh.model.hosp.Department;
 import com.saimo.yygh.vo.hosp.DepartmentQueryVo;
+import com.saimo.yygh.vo.hosp.DepartmentVo;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -72,5 +77,38 @@ public class DepartmentServiceImpl implements DepartmentService {
             departmentRepository.deleteById(department.getId());
         }
 
+    }
+
+    @Override
+    public List<DepartmentVo> getDeptList(String hoscode) {
+        List<DepartmentVo> res = new ArrayList<>();
+        Department department = new Department();
+        department.setHoscode(hoscode);
+        Example<Department> of = Example.of(department);
+        List<Department> all = departmentRepository.findAll(of);
+        //转为树形
+        //按照大科室编号分组
+        Map<String, List<Department>> depMap = all.stream().collect(Collectors.groupingBy(Department::getBigcode));
+        for (Entry<String, List<Department>> stringListEntry : depMap.entrySet()) {
+            String depcode = stringListEntry.getKey();
+            List<Department> depList = stringListEntry.getValue();
+
+            //大科室
+            DepartmentVo departmentVo = new DepartmentVo();
+            departmentVo.setDepcode(depcode);
+            departmentVo.setDepname(depList.get(0).getBigname());
+            //多个小科室
+            List<DepartmentVo> child = new ArrayList<>();
+            for (Department department1 : depList) {
+                DepartmentVo departmentVo1 = new DepartmentVo();
+                departmentVo1.setDepname(department1.getDepname());
+                departmentVo1.setDepcode(department1.getDepcode());
+                child.add(departmentVo1);
+            }
+            departmentVo.setChildren(child);
+            res.add(departmentVo);
+        }
+
+        return res;
     }
 }
