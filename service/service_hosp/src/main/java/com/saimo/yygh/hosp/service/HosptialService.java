@@ -16,4 +16,6 @@ public interface HosptialService {
     void updateStatus(String id, int status);
 
     Hospital getHospById(String id);
+
+    String getHospName(String hoscode);
 }

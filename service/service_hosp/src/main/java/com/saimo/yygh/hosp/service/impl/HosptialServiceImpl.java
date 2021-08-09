@@ -117,4 +117,9 @@ public class HosptialServiceImpl implements HosptialService {
 
         return hospital;
     }
+
+    @Override
+    public String getHospName(String hoscode) {
+        return hosptialRepsitory.getHospitalByHoscode(hoscode).getHosname();
+    }
 }

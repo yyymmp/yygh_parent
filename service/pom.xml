@@ -27,12 +27,12 @@
       <artifactId>model</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
-        <dependency>
-          <groupId>com.saimo</groupId>
-          <artifactId>service_utils</artifactId>
-          <version>1.0-SNAPSHOT</version>
-        </dependency>
-<!--    web-->
+    <dependency>
+      <groupId>com.saimo</groupId>
+      <artifactId>service_utils</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <!--    web-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -54,15 +54,20 @@
       <optional>true</optional>
     </dependency>
     <!-- 服务调用feign -->
-        <dependency>
-          <groupId>org.springframework.cloud</groupId>
-          <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
     <!--    &lt;!&ndash; 服务注册 &ndash;&gt;-->
-        <dependency>
-          <groupId>com.alibaba.cloud</groupId>
-          <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
     <!-- 流量控制 -->
     <!-- <dependency>
          <groupId>com.alibaba.cloud</groupId>
