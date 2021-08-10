@@ -3,6 +3,7 @@ package com.saimo.yygh.hosp.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.saimo.hospital.cmnclient.DictFeignClient;
 import com.saimo.yygh.hosp.repository.HosptialRepository;
+import com.saimo.yygh.hosp.service.HosptialService;
 import com.saimo.yygh.model.hosp.Hospital;
 import com.saimo.yygh.vo.hosp.HospitalQueryVo;
 import java.util.Date;
