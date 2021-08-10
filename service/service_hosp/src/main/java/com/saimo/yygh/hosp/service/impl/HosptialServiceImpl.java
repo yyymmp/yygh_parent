@@ -2,15 +2,12 @@ package com.saimo.yygh.hosp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.saimo.hospital.cmnclient.DictFeignClient;
-import com.saimo.yygh.common.result.Result;
 import com.saimo.yygh.hosp.repository.HosptialRepository;
-import com.saimo.yygh.hosp.service.HosptialService;
 import com.saimo.yygh.model.hosp.Hospital;
-import com.saimo.yygh.model.hosp.Schedule;
 import com.saimo.yygh.vo.hosp.HospitalQueryVo;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -121,5 +118,10 @@ public class HosptialServiceImpl implements HosptialService {
     @Override
     public String getHospName(String hoscode) {
         return hosptialRepsitory.getHospitalByHoscode(hoscode).getHosname();
+    }
+
+    @Override
+    public List<Hospital> findByHosname(String hosname) {
+        return hosptialRepsitory.findHospitalByHosnameLike(hosname);
     }
 }

@@ -2,6 +2,7 @@ package com.saimo.yygh.hosp.service;
 
 import com.saimo.yygh.model.hosp.Hospital;
 import com.saimo.yygh.vo.hosp.HospitalQueryVo;
+import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Page;
 
@@ -18,4 +19,6 @@ public interface HosptialService {
     Hospital getHospById(String id);
 
     String getHospName(String hoscode);
+
+    List<Hospital> findByHosname(String hosname);
 }

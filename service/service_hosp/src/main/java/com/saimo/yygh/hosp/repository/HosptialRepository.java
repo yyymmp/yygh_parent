@@ -1,6 +1,7 @@
 package com.saimo.yygh.hosp.repository;
 
 import com.saimo.yygh.model.hosp.Hospital;
+import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,6 @@ public interface HosptialRepository extends MongoRepository<Hospital, String> {
 
     //getHosptialByHoscode 按照规范写 springdata会自动生成该方法
     Hospital getHospitalByHoscode(String hoscode);
+
+    List<Hospital> findHospitalByHosnameLike(String hosname);
 }
