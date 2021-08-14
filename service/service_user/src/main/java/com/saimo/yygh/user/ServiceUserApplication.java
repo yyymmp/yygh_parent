@@ -1,25 +1,24 @@
-package com.saimo.yygh.cmn;
+package com.saimo.yygh.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author clearlove
- * @ClassName ServiceHospApplication.java
+ * @ClassName ServiceUserApplication.java
  * @Description
- * @createTime 2021年07月26日 23:12:00
+ * @createTime 2021年08月12日 23:34:00
  */
 @SpringBootApplication
-@ComponentScan(basePackages = "com.saimo")
+@EnableSwagger2
 //注册到nacos
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = "com.saimo")
-public class ServiceCmnpApplication {
+public class ServiceUserApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ServiceCmnpApplication.class, args);
+        SpringApplication.run(ServiceUserApplication.class, args);
     }
 }

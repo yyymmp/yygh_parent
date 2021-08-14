@@ -10,7 +10,7 @@ public interface HosptialService {
 
     void save(Map<String, Object> map);
 
-    Hospital getHospitalSetByHoscode(String hoscode);
+    Hospital getHospitalByHoscode(String hoscode);
 
     Page<Hospital> listHosp(long page, long limit, HospitalQueryVo hospitalQueryVo);
 
@@ -21,4 +21,6 @@ public interface HosptialService {
     String getHospName(String hoscode);
 
     List<Hospital> findByHosname(String hosname);
+
+    Map<String, Object> item(String hoscode);
 }

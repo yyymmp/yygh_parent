@@ -116,4 +116,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     public String getDepName(String hoscode, String depcode) {
         return departmentRepository.findByHoscodeAndDepcode(hoscode, depcode).getDepname();
     }
+
+    @Override
+    public List<DepartmentVo> findDeptTree(String hoscode) {
+        return null;
+    }
 }

@@ -7,6 +7,7 @@ import com.saimo.yygh.hosp.service.HosptialService;
 import com.saimo.yygh.model.hosp.Hospital;
 import com.saimo.yygh.vo.hosp.HospitalQueryVo;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.BeanUtils;
@@ -59,7 +60,7 @@ public class HosptialServiceImpl implements HosptialService {
     }
 
     @Override
-    public Hospital getHospitalSetByHoscode(String hoscode) {
+    public Hospital getHospitalByHoscode(String hoscode) {
         return hosptialRepsitory.getHospitalByHoscode(hoscode);
     }
 
@@ -105,6 +106,11 @@ public class HosptialServiceImpl implements HosptialService {
     @Override
     public Hospital getHospById(String id) {
         Hospital hospital = hosptialRepsitory.findById(id).get();
+        setHosptial(hospital);
+        return hospital;
+    }
+
+    public void setHosptial(Hospital hospital) {
         String hostypeString = dictFeignClient.getName("Hostype", hospital.getHostype());
         String provinceString = dictFeignClient.getName(hospital.getProvinceCode());
         String cityString = dictFeignClient.getName(hospital.getCityCode());
@@ -112,8 +118,6 @@ public class HosptialServiceImpl implements HosptialService {
 
         hospital.getParam().put("hostypeString", hostypeString);
         hospital.getParam().put("fullAddress", provinceString + cityString + districtString);
-
-        return hospital;
     }
 
     @Override
@@ -124,5 +128,15 @@ public class HosptialServiceImpl implements HosptialService {
     @Override
     public List<Hospital> findByHosname(String hosname) {
         return hosptialRepsitory.findHospitalByHosnameLike(hosname);
+    }
+
+    @Override
+    public Map<String, Object> item(String hoscode) {
+        Map<String, Object> map = new HashMap<>();
+        Hospital hospital = this.getHospitalByHoscode(hoscode);
+        setHosptial(hospital);
+        map.put("hospital", hospital);
+        map.put("bookRule", hospital.getBookingRule());
+        return map;
     }
 }

@@ -142,7 +142,7 @@ public class ApiController {
         //获取hospcode
         String hoscode = (String) map.get("hoscode");
         //从mongo中获取
-        Hospital hospital = hosptialService.getHospitalSetByHoscode(hoscode);
+        Hospital hospital = hosptialService.getHospitalByHoscode(hoscode);
 
         return Result.ok(hospital);
     }
