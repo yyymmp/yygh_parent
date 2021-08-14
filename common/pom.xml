@@ -12,6 +12,8 @@
   <artifactId>common</artifactId>
   <packaging>pom</packaging>
   <modules>
+
+
     <module>common_utils</module>
     <module>service_utils</module>
   </modules>

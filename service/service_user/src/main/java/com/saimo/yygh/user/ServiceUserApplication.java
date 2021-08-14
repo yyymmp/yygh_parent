@@ -13,9 +13,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @createTime 2021年08月12日 23:34:00
  */
 @SpringBootApplication
-@EnableSwagger2
 //注册到nacos
 @EnableDiscoveryClient
+@ComponentScan(basePackages = "com.saimo")
 public class ServiceUserApplication {
 
     public static void main(String[] args) {
