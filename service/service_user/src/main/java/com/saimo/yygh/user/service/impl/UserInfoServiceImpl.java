@@ -12,6 +12,7 @@ import com.saimo.yygh.user.service.UserInfoService;
 import com.saimo.yygh.vo.user.LoginVo;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -37,26 +38,39 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInforMapper, UserInfo> 
             throw new HospitalException(ResultCodeEnum.LOGIN_DISABLED_ERROR);
         }
         //验证验证码
-        if (!redisTemplate.opsForValue().get(phone).equals(code)){
+        if (!Objects.equals(redisTemplate.opsForValue().get(phone), code)) {
             throw new HospitalException(ResultCodeEnum.CODE_ERROR);
         }
-
-        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("phone", phone);
-        UserInfo userInfo = baseMapper.selectOne(queryWrapper);
-        //第一次登录
-        if (null == userInfo) {
-            //添加到数据库
-            //添加信息到数据库
-            userInfo = new UserInfo();
-            userInfo.setName("");
-            userInfo.setPhone(phone);
-            userInfo.setStatus(1);
-            baseMapper.insert(userInfo);
-        }
-        //校验是否被禁用
-        if (userInfo.getStatus() == 0) {
-            throw new HospitalException(ResultCodeEnum.LOGIN_DISABLED_ERROR);
+        UserInfo userInfo;
+        //通过微信登录  绑定手机号
+        //绑定手机号码
+        if (!StringUtils.isEmpty(loginVo.getOpenid())) {
+            //此时已经在回调方法中写入了openid和用户信息
+            userInfo = this.selectWxInfoOpenId(loginVo.getOpenid());
+            if (null != userInfo) {
+                userInfo.setPhone(loginVo.getPhone());
+                this.updateById(userInfo);
+            } else {
+                throw new HospitalException(ResultCodeEnum.DATA_ERROR);
+            }
+        } else {
+            QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("phone", phone);
+            userInfo = baseMapper.selectOne(queryWrapper);
+            //第一次登录
+            if (null == userInfo) {
+                //添加到数据库
+                //添加信息到数据库
+                userInfo = new UserInfo();
+                userInfo.setName("");
+                userInfo.setPhone(phone);
+                userInfo.setStatus(1);
+                baseMapper.insert(userInfo);
+            }
+            //校验是否被禁用
+            if (userInfo.getStatus() == 0) {
+                throw new HospitalException(ResultCodeEnum.LOGIN_DISABLED_ERROR);
+            }
         }
 
         //不是第一次 直接登录
@@ -74,5 +88,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInforMapper, UserInfo> 
         map.put("token", token);
         return map;
 
+    }
+
+    @Override
+    public boolean save(UserInfo entity) {
+        return this.baseMapper.insert(entity) > 0;
+    }
+
+    @Override
+    public UserInfo selectWxInfoOpenId(String openid) {
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("openid", openid);
+        return this.baseMapper.selectOne(queryWrapper);
     }
 }
