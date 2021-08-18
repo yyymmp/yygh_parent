@@ -6,10 +6,12 @@ import com.saimo.yygh.common.exception.GlobalExceptionHandler;
 import com.saimo.yygh.common.exception.HospitalException;
 import com.saimo.yygh.common.helper.JwtHelper;
 import com.saimo.yygh.common.result.ResultCodeEnum;
+import com.saimo.yygh.enums.AuthStatusEnum;
 import com.saimo.yygh.model.user.UserInfo;
 import com.saimo.yygh.user.mapper.UserInforMapper;
 import com.saimo.yygh.user.service.UserInfoService;
 import com.saimo.yygh.vo.user.LoginVo;
+import com.saimo.yygh.vo.user.UserAuthVo;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -100,5 +102,21 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInforMapper, UserInfo> 
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("openid", openid);
         return this.baseMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public void userAuth(Long userId, UserAuthVo userAuthVo) {
+        UserInfo userInfo = baseMapper.selectById(userId);
+        userInfo.setName(userAuthVo.getName());
+        userInfo.setCertificatesNo(userAuthVo.getCertificatesNo());
+        userInfo.setCertificatesUrl(userAuthVo.getCertificatesUrl());
+        userInfo.setCertificatesType(userAuthVo.getCertificatesType());
+        userInfo.setAuthStatus(AuthStatusEnum.AUTH_RUN.getStatus());
+        baseMapper.updateById(userInfo);
+    }
+
+    @Override
+    public UserInfo getUserInfo(Long userId) {
+        return getById(userId);
     }
 }
