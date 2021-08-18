@@ -3,6 +3,8 @@ package com.saimo.yygh.user;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -16,6 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //注册到nacos
 @EnableDiscoveryClient
 @ComponentScan(basePackages = "com.saimo")
+@EnableFeignClients(basePackages = "com.saimo")
 public class ServiceUserApplication {
 
     public static void main(String[] args) {

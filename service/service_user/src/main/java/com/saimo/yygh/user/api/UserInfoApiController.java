@@ -1,4 +1,4 @@
-package com.saimo.yygh.user.controller;
+package com.saimo.yygh.user.api;
 
 import com.saimo.yygh.common.result.Result;
 import com.saimo.yygh.common.utils.AuthContextHolder;
