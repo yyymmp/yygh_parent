@@ -1,5 +1,7 @@
 package com.saimo.yygh.msm.service;
 
+import com.saimo.yygh.vo.msm.MsmVo;
+
 /**
  * @author clearlove
  * @ClassName MsmService.java
@@ -9,4 +11,6 @@ package com.saimo.yygh.msm.service;
 public interface MsmService {
 
     public boolean send(String phone, String bitRandom);
+
+    public boolean send(MsmVo msmVo);
 }

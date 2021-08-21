@@ -51,13 +51,6 @@ public class PatientApiController {
         return Result.ok();
     }
 
-    //根据id获取就诊人信息
-    @GetMapping("auth/get/{id}")
-    public Result<Patient> getPatient(@PathVariable Long id) {
-        Patient patient = patientService.getPatientId(id);
-        return Result.ok(patient);
-    }
-
     //修改就诊人
     @PostMapping("auth/update")
     public Result<Void> updatePatient(@RequestBody Patient patient) {
@@ -70,6 +63,14 @@ public class PatientApiController {
     public Result<Void> removePatient(@PathVariable Long id) {
         patientService.removeById(id);
         return Result.ok();
+    }
+
+
+    //根据id获取就诊人信息  供其他服务调用
+    @GetMapping("auth/get/{id}")
+    public Result<Patient> getPatient(@PathVariable Long id) {
+        Patient patient = patientService.getPatientId(id);
+        return Result.ok(patient);
     }
 
 

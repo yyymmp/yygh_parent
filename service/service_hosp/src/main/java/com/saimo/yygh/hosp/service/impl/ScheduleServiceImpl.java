@@ -3,8 +3,10 @@ package com.saimo.yygh.hosp.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.saimo.yygh.common.exception.HospitalException;
 import com.saimo.yygh.common.result.ResultCodeEnum;
+import com.saimo.yygh.hosp.mapper.HospitalSetMapper;
 import com.saimo.yygh.hosp.repository.ScheduleRespository;
 import com.saimo.yygh.hosp.service.DepartmentService;
 import com.saimo.yygh.hosp.service.HosptialService;
@@ -12,8 +14,10 @@ import com.saimo.yygh.hosp.service.ScheduleService;
 import com.saimo.yygh.model.hosp.BookingRule;
 import com.saimo.yygh.model.hosp.Department;
 import com.saimo.yygh.model.hosp.Hospital;
+import com.saimo.yygh.model.hosp.HospitalSet;
 import com.saimo.yygh.model.hosp.Schedule;
 import com.saimo.yygh.vo.hosp.BookingScheduleRuleVo;
+import com.saimo.yygh.vo.hosp.ScheduleOrderVo;
 import com.saimo.yygh.vo.hosp.ScheduleQueryVo;
 import java.util.ArrayList;
 import java.util.Date;
@@ -355,5 +359,54 @@ public class ScheduleServiceImpl implements ScheduleService {
         String dateTimeString = new DateTime(date).toString("yyyy-MM-dd") + " " + timeString;
         DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm").parseDateTime(dateTimeString);
         return dateTime;
+    }
+
+    @Override
+    public ScheduleOrderVo getScheduleOrderVo(String scheduleId) {
+        ScheduleOrderVo scheduleOrderVo = new ScheduleOrderVo();
+        Schedule schedule = scheduleRespository.findById(scheduleId).get();
+
+        //获取排班规则信息
+        Hospital hospital = hosptialService.getHospitalByHoscode(schedule.getHoscode());
+
+        if (null == hospital) {
+            throw new HospitalException(ResultCodeEnum.DATA_ERROR);
+        }
+        //把获取数据设置到scheduleOrderVo
+        scheduleOrderVo.setHoscode(schedule.getHoscode());
+        scheduleOrderVo.setHosname(hosptialService.getHospName(schedule.getHoscode()));
+        scheduleOrderVo.setDepcode(schedule.getDepcode());
+        scheduleOrderVo.setDepname(departmentService.getDepName(schedule.getHoscode(), schedule.getDepcode()));
+        scheduleOrderVo.setHosScheduleId(schedule.getHosScheduleId());
+        scheduleOrderVo.setAvailableNumber(schedule.getAvailableNumber());
+        scheduleOrderVo.setTitle(schedule.getTitle());
+        scheduleOrderVo.setReserveDate(schedule.getWorkDate());
+        scheduleOrderVo.setReserveTime(schedule.getWorkTime());
+        scheduleOrderVo.setAmount(schedule.getAmount());
+
+        BookingRule bookingRule = hospital.getBookingRule();
+        //退号截止天数（如：就诊前一天为-1，当天为0）
+        int quitDay = bookingRule.getQuitDay();
+        DateTime quitTime = this.getDateTime(new DateTime(schedule.getWorkDate()).plusDays(quitDay).toDate(), bookingRule.getQuitTime());
+        scheduleOrderVo.setQuitTime(quitTime.toDate());
+
+        //预约开始时间
+        DateTime startTime = this.getDateTime(new Date(), bookingRule.getReleaseTime());
+        scheduleOrderVo.setStartTime(startTime.toDate());
+
+        //预约截止时间
+        DateTime endTime = this.getDateTime(new DateTime().plusDays(bookingRule.getCycle()).toDate(), bookingRule.getStopTime());
+        scheduleOrderVo.setEndTime(endTime.toDate());
+
+        //当天停止挂号时间
+        DateTime stopTime = this.getDateTime(new Date(), bookingRule.getStopTime());
+        scheduleOrderVo.setStartTime(startTime.toDate());
+        return scheduleOrderVo;
+    }
+
+    @Override
+    public void update(Schedule schedule) {
+        schedule.setUpdateTime(new Date());
+        scheduleRespository.save(schedule);
     }
 }

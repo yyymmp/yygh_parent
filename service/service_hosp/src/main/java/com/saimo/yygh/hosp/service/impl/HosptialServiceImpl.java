@@ -6,6 +6,7 @@ import com.saimo.yygh.hosp.repository.HosptialRepository;
 import com.saimo.yygh.hosp.service.HosptialService;
 import com.saimo.yygh.model.hosp.Hospital;
 import com.saimo.yygh.vo.hosp.HospitalQueryVo;
+import com.saimo.yygh.vo.order.SignInfoVo;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;

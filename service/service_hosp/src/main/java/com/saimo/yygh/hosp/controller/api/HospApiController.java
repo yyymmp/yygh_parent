@@ -2,12 +2,15 @@ package com.saimo.yygh.hosp.controller.api;
 
 import com.saimo.yygh.common.result.Result;
 import com.saimo.yygh.hosp.service.DepartmentService;
+import com.saimo.yygh.hosp.service.HospitalSetService;
 import com.saimo.yygh.hosp.service.HosptialService;
 import com.saimo.yygh.hosp.service.ScheduleService;
 import com.saimo.yygh.model.hosp.Hospital;
 import com.saimo.yygh.model.hosp.Schedule;
 import com.saimo.yygh.vo.hosp.DepartmentVo;
 import com.saimo.yygh.vo.hosp.HospitalQueryVo;
+import com.saimo.yygh.vo.hosp.ScheduleOrderVo;
+import com.saimo.yygh.vo.order.SignInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,6 +37,9 @@ public class HospApiController {
 
     @Autowired
     private HosptialService hosptialService;
+
+    @Autowired
+    private HospitalSetService hospitalSetService;
 
     @Autowired
     private DepartmentService departmentService;
@@ -103,5 +109,22 @@ public class HospApiController {
     public Result getSchedule(@PathVariable String scheduleId) {
         Schedule schedule = scheduleService.getScheduleId(scheduleId);
         return Result.ok(schedule);
+    }
+
+    //这里不使用统一返回是因为此接口提供远程调用处理
+    @ApiOperation(value = "根据排班id获取预约下单数据")
+    @GetMapping("inner/getScheduleOrderVo/{scheduleId}")
+    public ScheduleOrderVo getScheduleOrderVo(
+            @ApiParam(name = "scheduleId", value = "排班id", required = true)
+            @PathVariable("scheduleId") String scheduleId) {
+        return scheduleService.getScheduleOrderVo(scheduleId);
+    }
+
+    @ApiOperation(value = "获取医院签名信息")
+    @GetMapping("inner/getSignInfoVo/{hoscode}")
+    public SignInfoVo getSignInfoVo(
+            @ApiParam(name = "hoscode", value = "医院code", required = true)
+            @PathVariable("hoscode") String hoscode) {
+        return hospitalSetService.getSignInfoVo(hoscode);
     }
 }

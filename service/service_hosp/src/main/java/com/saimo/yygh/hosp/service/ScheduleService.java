@@ -1,6 +1,7 @@
 package com.saimo.yygh.hosp.service;
 
 import com.saimo.yygh.model.hosp.Schedule;
+import com.saimo.yygh.vo.hosp.ScheduleOrderVo;
 import com.saimo.yygh.vo.hosp.ScheduleQueryVo;
 import java.util.List;
 import java.util.Map;
@@ -21,4 +22,10 @@ public interface ScheduleService {
     Map<String, Object> getBookingScheduleRule(Integer page, Integer limit, String hoscode, String depcode);
 
     Schedule getScheduleId(String scheduleId);
+
+    ScheduleOrderVo getScheduleOrderVo(String scheduleId);
+
+    //mq更新排班
+    void update(Schedule schedule);
+
 }
